@@ -1,36 +1,38 @@
 function toggleNumber(el) {
-    // check if number is already "locked"
-
+    // Check if number is already "locked"
     if (el.classList == "locked") {
         // Remove class to element
         el.classList.remove("locked");
     } else {
+        // Get parent element (div) of el (button) and get all elements inside div with class locked
         const lockedElements = el.parentElement.querySelectorAll(".locked");
 
+        // Check if locked elements is less than 7
         if (lockedElements.length < 7) {
-            // if not, lock the number byy adding class to element
+            // If not, lock the number by adding class to element
             el.classList.add("locked");
 
-            console.log("locked: ", el.id)
+            console.log("locked: ", el.id);
         }
     }
 }
 
-
-function generateNumber(el) {
-
+function generateNumbers(el) {
+    // 1. Check if any numbers is locked
     const lockedElements = el.parentElement.querySelectorAll(".locked");
 
-
+    // Check if locked elements is less than 7
     if (lockedElements.length < 7) {
         for (let i = lockedElements.length; i < 7;) {
-
+            // Generate random number between 1-40
             const randomNumber = Math.floor(Math.random() * 40) + 1;
 
+            // Get button with the random number
             const button = document.getElementById(
                 el.parentElement.id + "-" + randomNumber
             );
 
+            // If NOT locked, add locked class
             if (button.classList != "locked") {
                 button.classList.add("locked");
                 i++;
@@ -39,36 +41,33 @@ function generateNumber(el) {
     }
 }
 
-
-
 function init() {
     const leftSection = document.querySelector("#left");
 
-    // create 12 divs that holds numbers
+    // Create 12 divs that holds the numbers
     for (let i = 1; i < 13; i++) {
         const newDiv = document.createElement("div");
-        newDiv.id = i
+        newDiv.id = i;
 
-        // crate 40 button inside every div
+        // Create 40 buttons inside every div
         for (let i = 1; i < 41; i++) {
             const newButton = document.createElement("button");
 
-            // set id on button
+            // Set id on button
             newButton.id = newDiv.id + "-" + i;
-            // set text inside button
+            // Set text inside button
             newButton.innerText = i;
-            // set onclick on button
+            // Set onclick on button
             newButton.onclick = function () {
                 toggleNumber(this);
             };
 
-
-
             // Add button inside div
             newDiv.appendChild(newButton);
-
         }
-        const newLetter = document.createElement("p")
+
+        // Add row name (A, B, C...)
+        const newLetter = document.createElement("p");
 
         if (i == 1) {
             newLetter.innerText = "A";
@@ -96,20 +95,21 @@ function init() {
             newLetter.innerText = "L";
         }
 
+        newDiv.appendChild(newLetter);
 
-        const pikaButton = document.createElement("button")
-        pikaButton.innerText = "P"
+        // Add "pika"-button to div
+        const pikaButton = document.createElement("button");
+        pikaButton.innerText = "P";
 
         pikaButton.onclick = function () {
-            generateNumber(this);
-        }
+            generateNumbers(this);
+        };
 
-        newDiv.appendChild(pikaButton)
+        newDiv.appendChild(pikaButton);
 
+        // Add div (with buttons) to left section
         leftSection.appendChild(newDiv);
     }
-
-
 }
 
 init();
